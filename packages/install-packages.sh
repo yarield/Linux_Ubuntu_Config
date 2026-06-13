@@ -19,14 +19,15 @@ ubuntu_codename() {
     printf '%s\n' "${UBUNTU_CODENAME:-${VERSION_CODENAME:-}}"
 } 
 
+arch(){
+    dpkg --print-architecture
+}
+
 nyancat() {
     sudo apt install nyancat
     green "     nyancat se ha instalado correctamente"
 }
 
-arch(){
-    dpkg --print-architecture
-}
 main (){ 
     require_sudo
     ubuntu_codename

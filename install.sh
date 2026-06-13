@@ -24,6 +24,57 @@ green "    Paquetes y aplicaciones instalados"
 # "$SCRIPT_DIR/telemetry/disable-telemetry.sh"
 # green "    Telemetría desactivada"
 
+# ──────────────────────────────────────────────
+# 3. Bash
+# ──────────────────────────────────────────────
+green ">>> Instalando .bashrc"
+if [ -f "$HOME/.bashrc" ]; then
+    cp "$HOME/.bashrc" "$HOME/.bashrc.bak"
+    yellow "    Backup guardado en ~/.bashrc.bak"
+fi
+cp "$SCRIPT_DIR/bash/.bashrc" "$HOME/.bashrc"
+green "    .bashrc instalado"
+
+
+# ──────────────────────────────────────────────
+# 4. Terminal (GNOME Terminal)
+# ──────────────────────────────────────────────
+if command -v dconf &>/dev/null; then
+    green ">>> Cargando configuración de GNOME Terminal"
+    dconf load /org/gnome/terminal/ < "$SCRIPT_DIR/terminal/gnome-terminal.dconf"
+    green "    Terminal configurada"
+else
+    yellow ">>> dconf no encontrado, saltando configuración de terminal"
+fi
+
+# ──────────────────────────────────────────────
+# 5. Atajos de teclado (GNOME)
+# ──────────────────────────────────────────────
+if command -v dconf &>/dev/null; then
+    green ">>> Cargando atajos de teclado"
+    dconf load /org/gnome/desktop/wm/keybindings/ < "$SCRIPT_DIR/keybindings/wm-keybindings.dconf"
+    dconf load /org/gnome/settings-daemon/plugins/media-keys/ < "$SCRIPT_DIR/keybindings/media-keys.dconf"
+    green "    Atajos configurados"
+else
+    yellow ">>> dconf no encontrado, saltando atajos de teclado"
+fi
+
+
+# ──────────────────────────────────────────────
+# 6. Entorno GNOME (interfaz, input, periféricos, shell, mutter)
+# ──────────────────────────────────────────────
+if command -v dconf &>/dev/null; then
+    green ">>> Cargando configuración de entorno GNOME"
+    dconf load /org/gnome/desktop/interface/ < "$SCRIPT_DIR/gnome/desktop-interface.dconf"
+    green "    Entorno GNOME configurado"
+else
+    yellow ">>> dconf no encontrado, saltando configuración de entorno GNOME"
+fi
+
+
+# ──────────────────────────────────────────────
+green ""
+green "Configuración restaurada. Abre una nueva terminal para aplicar los cambios de bash."
 
 # ──────────────────────────────────────────────
 green ""
